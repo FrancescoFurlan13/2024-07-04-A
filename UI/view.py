@@ -24,26 +24,27 @@ class View(ft.UserControl):
         self.txt_result2 = None  # Qui scrivere gli outputs del punto 2
 
     def load_interface(self):
-        # title
+        # Caricamento degli elementi dell'interfaccia
         self._title = ft.Text("TdP 2024 - Esame del 04-07-2024 - A", color="blue", size=24)
         self._page.controls.append(self._title)
 
-        # First row with some controls
-        self.ddyear = ft.Dropdown(label="Anno",
-                                  hint_text="Anno da analizzare per gli avvistamenti.")
+        # Menù a tendina per Anno e Shape
+        self.ddyear = ft.Dropdown(label="Anno", hint_text="Anno da analizzare per gli avvistamenti.",
+                                  on_change=self._controller.fill_shape_dropdown)
+        self.ddshape = ft.Dropdown(label="Shape", hint_text="Shape da analizzare per gli avvistamenti.")
 
-        self.ddshape = ft.Dropdown(label="Shape",
-                                   hint_text="Shape da analizzare per gli avvistamenti.")
-        self.btn_graph = ft.ElevatedButton(text="Crea Grafo",
-                                           tooltip="Crea il grafo del punto 1",
-                                           on_click=self._controller.handle_graph)
-        self.btn_path = ft.ElevatedButton(text="Calcola percorso",
-                                          tooltip="Risolvi il punto 2",
-                                          on_click=self._controller.handle_path)
-
+        # Pulsanti e layout
+        self.btn_graph = ft.ElevatedButton(text="Crea Grafo", on_click=self._controller.handle_graph)
+        self.btn_path = ft.ElevatedButton(text="Calcola percorso", on_click=self._controller.handle_path)
         row1 = ft.Row([self.ddyear, self.ddshape, self.btn_graph, self.btn_path],
                       alignment=ft.MainAxisAlignment.SPACE_EVENLY)
         self._page.controls.append(row1)
+
+        # Popolamento iniziale del menù a tendina per l'anno
+        self._controller.fill_year_dropdown()
+
+        # Aggiornamento della pagina
+        self._page.update()
 
         # List View where the reply is printed
         self.txt_result1 = ft.ListView(width=400, expand=1, spacing=10, padding=20, auto_scroll=False)
